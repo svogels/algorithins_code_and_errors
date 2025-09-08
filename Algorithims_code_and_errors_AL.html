@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning About Code Errors</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4ff;
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #764ba2;
+            margin: 20px 0 15px 0;
+            font-size: 1.4em;
+        }
+
+        p, li {
+            margin-bottom: 15px;
+        }
+
+        ul {
+            padding-left: 25px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            font-size: 16px;
+        }
+
+        .code-block pre {
+            margin: 0;
+        }
+
+        .error-highlight {
+            background: rgba(255, 107, 107, 0.3);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: #5a67d8;
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .feedback.success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #28a745;
+        }
+
+        .feedback.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #dc3545;
+        }
+
+        .quiz-option {
+            display: block;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .quiz-option.selected {
+            border-color: #667eea;
+            background: #e9eefe;
+            font-weight: bold;
+        }
+        
+        .quiz-option input {
+            margin-right: 10px;
+        }
+
+        .explanation {
+            background: #e9eefe;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #764ba2;
+        }
+
+        .pong-canvas {
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            background: #000;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .control-panel {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Page-level tabs */
+        .page-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 15px;
+        }
+
+        .page-tab-button {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px 10px 0 0;
+            cursor: pointer;
+            font-weight: bold;
+            color: #667eea;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+            border-bottom: none;
+            position: relative;
+            top: 2px;
+        }
+
+        .page-tab-button:hover {
+            background: #f0f4ff;
+        }
+
+        .page-tab-button.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .page-tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page-tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <header>
+            <h1>Learning About Code Errors</h1>
+            <p>A simple guide to finding and fixing mistakes in code.</p>
+        </header>
+
+        <main id="main-content">
+            <!-- Section 1: Introduction -->
+            <section class="section" id="section1">
+                <h2>Let's Get Started!</h2>
+                
+                <h3>What we will learn today:</h3>
+                <ul>
+                    <li>I can find mistakes in code.</li>
+                    <li>I can understand different types of mistakes.</li>
+                    <li>I can help fix the code for a simple game.</li>
+                </ul>
+                
+                <div class="explanation">
+                    <h3>Meet the Game: Pong!</h3>
+                    <p>We will use the game <strong>Pong</strong> to learn about code. Pong is a simple game where you move a paddle to hit a ball.</p>
+                    <canvas id="miniPong" class="pong-canvas" width="400" height="200"></canvas>
+                    <div class="control-panel">
+                        <button class="btn" onclick="startMiniPong()">Play Game</button>
+                        <button class="btn" onclick="pauseMiniPong()">Pause Game</button>
+                    </div>
+                    <p>Code tells the computer how the ball moves and how the paddles work.</p>
+                </div>
+            </section>
+
+            <div class="page-tabs">
+                <button class="page-tab-button active" onclick="switchPageTab('page-syntax', this)">Syntax Errors</button>
+                <button class="page-tab-button" onclick="switchPageTab('page-logic', this)">Logic Errors</button>
+                <button class="page-tab-button" onclick="switchPageTab('page-runtime', this)">Runtime Errors</button>
+                <button class="page-tab-button" onclick="switchPageTab('page-summary', this)">Summary</button>
+            </div>
+
+            <div id="page-syntax" class="page-tab-content active">
+                <!-- Section 2: Types of Errors -->
+                <section class="section" id="section2">
+                    <h2>What are Code Errors?</h2>
+                    <p>An error (or a "bug") is a mistake in the code. It can stop the program from working or make it do the wrong thing.</p>
+                    <p>We will learn about three types of errors.</p>
+                </section>
+
+                <!-- Syntax Errors -->
+                <section class="section" id="syntax-error">
+                    <h2>1. Syntax Errors</h2>
+                    <p>A syntax error is like a <strong>spelling or grammar mistake</strong> in a sentence. The computer does not understand the instruction because it is not written correctly.</p>
+                    
+                    <h3>Example:</h3>
+                    <p>Look at this code. It has a syntax error.</p>
+                    <div class="code-block">
+                        <pre><span class="line-number">1</span>  # This function should move the ball
+<span class="line-number">2</span>  <span class="error-highlight">def move_ball()</span>
+<span class="line-number">3</span>      ball_x = ball_x + 5</pre>
+                    </div>
+
+                    <div class="explanation">
+                        <h4>What's the mistake?</h4>
+                        <p>Line 2 is missing a colon (:) at the end. The computer needs the colon to understand it's a function.</p>
+                        <p><strong>Correct code:</strong> <code>def move_ball():</code></p>
+                    </div>
+
+                    <div id="syntax-quiz">
+                        <h3>Let's try!</h3>
+                        <p>What is missing at the end of the line <code>def move_ball()</code>?</p>
+                        <label class="quiz-option">
+                            <input type="radio" name="syntax" value="A"> A. A dot (.)
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="syntax" value="B"> B. A colon (:)
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="syntax" value="C"> C. A word ("end")
+                        </label>
+                        <button class="btn" onclick="checkQuiz('syntax', 'B')">Check Answer</button>
+                        <div id="syntax-feedback" class="feedback"></div>
+                    </div>
+                </section>
+            </div>
+
+            <div id="page-logic" class="page-tab-content">
+                <!-- Logic Errors -->
+                <section class="section" id="logic-error">
+                    <h2>2. Logic Errors</h2>
+                    <p>A logic error is when the code runs, but it does the <strong>wrong thing</strong>. The computer follows the instructions, but the instructions are wrong.</p>
+                    
+                    <h3>Example:</h3>
+                    <p>In Pong, the ball should bounce off the paddle. This code has a logic error.</p>
+                    <div class="code-block">
+                        <pre><span class="line-number">1</span>  # When the ball hits the paddle
+<span class="line-number">2</span>  if ball_hits_paddle:
+<span class="line-number">3</span>      <span class="error-highlight">ball_speed = ball_speed + 5</span></pre>
+                    </div>
+
+                    <div class="explanation">
+                        <h4>What's the mistake?</h4>
+                        <p>Line 3 makes the ball get faster every time it hits the paddle. It should reverse direction, not speed up.</p>
+                        <p><strong>Correct code:</strong> <code>ball_speed = -ball_speed</code> (This makes the speed negative, so it goes the other way).</p>
+                    </div>
+
+                    <div id="logic-quiz">
+                        <h3>Let's try!</h3>
+                        <p>What should the code do when the ball hits the paddle?</p>
+                        <label class="quiz-option">
+                            <input type="radio" name="logic" value="A"> A. Make the ball faster.
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="logic" value="B"> B. Stop the ball.
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="logic" value="C"> C. Reverse the ball's direction.
+                        </label>
+                        <button class="btn" onclick="checkQuiz('logic', 'C')">Check Answer</button>
+                        <div id="logic-feedback" class="feedback"></div>
+                    </div>
+                </section>
+            </div>
+
+            <div id="page-runtime" class="page-tab-content">
+                <!-- Runtime Errors -->
+                <section class="section" id="runtime-error">
+                    <h2>3. Runtime Errors</h2>
+                    <p>A runtime error happens when the program is running and it is asked to do something <strong>impossible</strong>. This makes the program crash.</p>
+                    
+                    <h3>Example:</h3>
+                    <p>This code tries to get a score from a list. It has a runtime error.</p>
+                    <div class="code-block">
+                        <pre><span class="line-number">1</span>  # There are two players, Player 1 and Player 2
+<span class="line-number">2</span>  scores = [10, 15]  # Player 1 has 10, Player 2 has 15
+<span class="line-number">3</span>  
+<span class="line-number">4</span>  # This line tries to get the score for Player 3
+<span class="line-number">5</span>  <span class="error-highlight">player_3_score = scores[2]</span></pre>
+                    </div>
+
+                    <div class="explanation">
+                        <h4>What's the mistake?</h4>
+                        <p>The list <code>scores</code> only has two items (at position 0 and 1). There is no item at position 2. Asking for it is impossible and crashes the program.</p>
+                    </div>
+
+                    <div id="runtime-quiz">
+                        <h3>Let's try!</h3>
+                        <p>Why does the code <code>scores[2]</code> cause a crash?</p>
+                        <label class="quiz-option">
+                            <input type="radio" name="runtime" value="A"> A. Because there is no Player 3 in the list.
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="runtime" value="B"> B. Because the scores are too high.
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="runtime" value="C"> C. Because you can't have a list of scores.
+                        </label>
+                        <button class="btn" onclick="checkQuiz('runtime', 'A')">Check Answer</button>
+                        <div id="runtime-feedback" class="feedback"></div>
+                    </div>
+                </section>
+            </div>
+
+            <div id="page-summary" class="page-tab-content">
+                <!-- Section 5: Reflection -->
+                <section class="section" id="section5">
+                    <h2>All Done!</h2>
+                    <div class="explanation">
+                        <h3>Great work today!</h3>
+                        <p>You learned about three types of code errors:</p>
+                        <ul>
+                            <li><strong>Syntax Errors:</strong> Like a spelling mistake.</li>
+                            <li><strong>Logic Errors:</strong> The code does the wrong thing.</li>
+                            <li><strong>Runtime Errors:</strong> The code is asked to do something impossible.</li>
+                        </ul>
+                        <p>Finding and fixing bugs is a big part of coding!</p>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <footer style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 2px solid #e0e0e0; color: #666;">
+            <p>Adapted Lesson for Stephen Liakos</p>
+        </footer>
+    </div>
+
+    <script>
+        // Hide all feedback boxes initially
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.feedback').forEach(box => {
+                box.style.display = 'none';
+            });
+            initializeMiniPong();
+        });
+
+        // Simple quiz checking function
+        function checkQuiz(quizName, correctAnswer) {
+            const selected = document.querySelector(`input[name="${quizName}"]:checked`);
+            const feedbackBox = document.getElementById(`${quizName}-feedback`);
+            
+            feedbackBox.style.display = 'block'; // Show the feedback box
+
+            if (selected && selected.value === correctAnswer) {
+                feedbackBox.innerHTML = '✅ Correct! Great job.';
+                feedbackBox.className = 'feedback success';
+            } else {
+                feedbackBox.innerHTML = '❌ Not quite. Try reading the explanation again and pick another answer.';
+                feedbackBox.className = 'feedback error';
+            }
+        }
+
+        // Page-level tab switching
+        function switchPageTab(tabId, button) {
+            document.querySelectorAll('.page-tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.page-tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+            button.classList.add('active');
+        }
+
+        // Mini Pong game
+        let miniPongRunning = false;
+        let miniPongAnimation;
+
+        function initializeMiniPong() {
+            const canvas = document.getElementById('miniPong');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            let ballX = 200, ballY = 100;
+            let ballSpeedX = 2, ballSpeedY = 2;
+            let paddle1Y = 80, paddle2Y = 80;
+            
+            function draw() {
+                ctx.fillStyle = '#000';
+                ctx.fillRect(0, 0, 400, 200);
+                
+                ctx.strokeStyle = '#fff';
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.moveTo(200, 0);
+                ctx.lineTo(200, 200);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(10, paddle1Y, 10, 40);
+                ctx.fillRect(380, paddle2Y, 10, 40);
+                
+                ctx.beginPath();
+                ctx.arc(ballX, ballY, 5, 0, Math.PI * 2);
+                ctx.fill();
+                
+                if (miniPongRunning) {
+                    ballX += ballSpeedX;
+                    ballY += ballSpeedY;
+                    
+                    if (ballY <= 5 || ballY >= 195) ballSpeedY = -ballSpeedY;
+                    
+                    if (ballX <= 20 && ballY > paddle1Y && ballY < paddle1Y + 40) ballSpeedX = Math.abs(ballSpeedX);
+                    if (ballX >= 380 && ballY > paddle2Y && ballY < paddle2Y + 40) ballSpeedX = -Math.abs(ballSpeedX);
+                    
+                    if (ballX < 0 || ballX > 400) {
+                        ballX = 200;
+                        ballY = 100;
+                    }
+                    
+                    paddle1Y += (ballY - paddle1Y - 20) * 0.05;
+                    paddle2Y += (ballY - paddle2Y - 20) * 0.05;
+                    
+                    paddle1Y = Math.max(0, Math.min(160, paddle1Y));
+                    paddle2Y = Math.max(0, Math.min(160, paddle2Y));
+                }
+                
+                miniPongAnimation = requestAnimationFrame(draw);
+            }
+            
+            draw();
+        }
+
+        function startMiniPong() {
+            miniPongRunning = true;
+        }
+
+        function pauseMiniPong() {
+            miniPongRunning = false;
+        }
+    </script>
+</body>
+</html>
