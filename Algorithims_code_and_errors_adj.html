@@ -1,0 +1,2039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithms, Code and Errors - Stage 5 Computing Technology</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            background: #f0f4ff;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .progress-container {
+            background: #f0f4ff;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            text-align: center;
+            min-width: 150px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            margin: 20px 0 15px 0;
+            font-size: 1.3em;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 12px 25px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #667eea;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .tab-button:hover {
+            background: #f0f4ff;
+            transform: translateY(-2px);
+        }
+
+        .tab-button.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .error-card {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid #ff6b6b;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .error-card:hover {
+            transform: translateX(5px);
+        }
+
+        .error-type {
+            font-weight: bold;
+            color: #ff6b6b;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .code-block pre {
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .line-number {
+            color: #636363;
+            margin-right: 15px;
+            user-select: none;
+        }
+
+        .error-highlight {
+            background: rgba(255, 107, 107, 0.3);
+            padding: 2px 4px;
+            border-radius: 3px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { background: rgba(255, 107, 107, 0.3); }
+            50% { background: rgba(255, 107, 107, 0.5); }
+        }
+
+        .interactive-exercise {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #26de81, #20bf6b);
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: bold;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .feedback.success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #28a745;
+        }
+
+        .feedback.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #dc3545;
+        }
+
+        .feedback.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 2px solid #17a2b8;
+        }
+
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+            margin: 10px 0;
+        }
+
+        input[type="text"]:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .quiz-option {
+            display: block;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+            transform: translateX(5px);
+        }
+
+        .quiz-option.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+            font-weight: bold;
+        }
+
+        .quiz-option.correct {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .quiz-option.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 15px;
+            background: linear-gradient(135deg, #ffd700, #ffb700);
+            color: #333;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 5px;
+            animation: bounce 0.5s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .achievement {
+            background: linear-gradient(135deg, #ffd700, #ffb700);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #333;
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.5);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 5px 20px rgba(255, 215, 0, 0.5); }
+            50% { box-shadow: 0 5px 30px rgba(255, 215, 0, 0.8); }
+        }
+
+        .timer {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .leaderboard {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .leaderboard-entry {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .leaderboard-entry:hover {
+            background: #e9ecef;
+        }
+
+        .leaderboard-entry.gold {
+            background: linear-gradient(135deg, #ffd700, #ffb700);
+            color: #333;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .pong-canvas {
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            background: #000;
+            display: block;
+            margin: 20px auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .control-panel {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #667eea;
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Page-level tabs */
+        .page-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 15px;
+        }
+
+        .page-tab-button {
+            padding: 12px 25px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px 10px 0 0;
+            cursor: pointer;
+            font-weight: bold;
+            color: #667eea;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            border-bottom: none;
+            position: relative;
+            top: 2px;
+        }
+
+        .page-tab-button:hover {
+            background: #f0f4ff;
+        }
+
+        .page-tab-button.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .page-tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page-tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .stat-card {
+                min-width: 100px;
+                padding: 10px 15px;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab-button {
+                width: 100%;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+            
+            .btn, .control-panel, .tabs {
+                display: none;
+            }
+            
+            .tab-content {
+                display: block !important;
+            }
+        }
+
+        /* Accessibility improvements */
+        :focus {
+            outline: 3px solid #667eea;
+            outline-offset: 2px;
+        }
+
+        [aria-hidden="true"] {
+            display: none;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .video-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            margin: 25px 0;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <div class="container">
+        <header>
+            <h1>Hi there! Let's learn about 🐛 Code Bugs 🐛</h1>
+            <p>A lesson just for you!</p>
+            <div class="meta-info">
+                <span class="meta-item">⏱️ We will take our time</span>
+                <span class="meta-item">🎯 Year 9</span>
+                <span class="meta-item">🎮 We will use the game Pong</span>
+            </div>
+        </header>
+
+        <div class="progress-container">
+            <h2>Your Learning Progress</h2>
+            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-fill" id="progressBar">0%</div>
+            </div>
+        </div>
+
+        <div class="game-stats">
+            <div class="stat-card">
+                <div class="stat-value" id="scoreDisplay">0</div>
+                <div class="stat-label">Points Earned</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="errorsFound">0</div>
+                <div class="stat-label">Errors Found</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="badgesEarned">0</div>
+                <div class="stat-label">Badges Earned</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="timeSpent">0:00</div>
+                <div class="stat-label">Time Spent</div>
+            </div>
+        </div>
+
+        <main id="main-content">
+            <!-- Section 1: Introduction -->
+            <section class="section" id="section1">
+                <h2>📚 Section 1: What We Will Learn Today!</h2>
+                
+                <div class="interactive-exercise">
+                    <h3>🎯 What we are learning</h3>
+                    <p><strong>Today, we will learn how to find and fix mistakes (bugs) in computer code.</strong></p>
+                    
+                    <h3>✅ By the end of this lesson, you will say:</h3>
+                    <ul>
+                        <li>I can find 3 types of code bugs: Syntax, Logic, and Runtime.</li>
+                        <li>I can fix the bugs in the code.</li>
+                        <li>I can help fix a Pong game!</li>
+                    </ul>
+                </div>
+
+                <div class="interactive-exercise">
+                    <h3>🎮 Let's look at our game: Pong!</h3>
+                    <p>We will use the game <strong>Pong</strong> to learn about bugs. Pong is a very old and famous game!</p>
+                    
+                    <canvas id="miniPong" class="pong-canvas" width="400" height="200"></canvas>
+                    <div class="control-panel">
+                        <button class="btn" onclick="startMiniPong()">▶️ Click here to Play!</button>
+                        <button class="btn btn-secondary" onclick="pauseMiniPong()">⏸️ Click here to Stop.</button>
+                    </div>
+                    
+                    <p><strong>Let's think about the game:</strong></p>
+                    <ul>
+                        <li>Look at the ball. How does it move?</li>
+                        <li>Look at the paddle. It moves up and down.</li>
+                        <li>What happens when the ball hits the paddle?</li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="page-tabs">
+                <button class="page-tab-button active" onclick="switchPageTab('page-section2', this)">Section 2: Errors</button>
+                <button class="page-tab-button" onclick="switchPageTab('page-section3', this)">Section 3: Guided Practice</button>
+                <button class="page-tab-button" onclick="switchPageTab('page-section4', this)">Section 4: Independent Practice</button>
+                <button class="page-tab-button" onclick="switchPageTab('page-section5', this)">Section 5: Pseudocode</button>
+                <button class="page-tab-button" onclick="switchPageTab('page-section6', this)">Section 6: Challenges</button>
+                <button class="page-tab-button" onclick="switchPageTab('page-section7', this)">Section 7: Reflection</button>
+                <button class="page-tab-button" onclick="switchPageTab('page-achievements', this)">Achievements</button>
+                <button class="page-tab-button" onclick="switchPageTab('page-leaderboard', this)">Leaderboard</button>
+            </div>
+
+            <div id="page-section2" class="page-tab-content active">
+                <!-- Section 2: Research Activity -->
+                <section class="section" id="section2">
+                    <h2>🔍 Section 2: Learning About Code Bugs</h2>
+                    
+                    <div class="tabs">
+                        <button class="tab-button active" onclick="switchTab('syntax', this)">Spelling Errors (Syntax)</button>
+                        <button class="tab-button" onclick="switchTab('logic', this)">Wrong Logic Errors</button>
+                        <button class="tab-button" onclick="switchTab('runtime', this)">Crashing Errors (Runtime)</button>
+                        <button class="tab-button" onclick="switchTab('compare', this)">Compare All Three</button>
+                    </div>
+
+                    <div id="syntax" class="tab-content active">
+                        <div class="error-card">
+                            <div class="video-container">
+                                <iframe src="https://www.youtube.com/embed/YvU-AprWuW8" title="YouTube video player" style="border: none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                            <div class="error-type">🔤 Spelling Errors (Syntax Errors)</div>
+                            <p><strong>What it is:</strong> A 'Syntax Error' is like a spelling mistake in your code. The computer does not understand it.</p>
+                            <p><strong>What happens:</strong> The code will not run at all.</p>
+                            
+                            <h4>Examples of Spelling Errors:</h4>
+                            <ul>
+                                <li>Forgetting a colon (:)</li>
+                                <li>Spelling a command wrong (like 'pritn' instead of 'print')</li>
+                                <li>Forgetting to close a bracket ()</li>
+                            </ul>
+
+                            <h4>Example in our Pong Game:</h4>
+                            <div class="code-block">
+                                <pre><span class="line-number">1</span>  # This code has a spelling mistake
+<span class="line-number">2</span>  <span class="error-highlight">def move_ball()</span>
+<span class="line-number">3</span>      ball_x = ball_x + 1
+<span class="line-number">4</span>      
+<span class="line-number">5</span>  # The mistake is a missing colon : on line 2</pre>
+                            </div>
+
+                            <div class="interactive-exercise">
+                                <h4>🎯 Let's fix it!</h4>
+                                <p>Type line 2 correctly in the box. Add the colon : at the end.</p>
+                                <input type="text" id="syntaxFix" placeholder="Type the correct line here..." aria-label="Fix syntax error">
+                                <button class="btn" onclick="checkSyntaxFix()">Check My Answer</button>
+                                <div id="syntaxFeedback"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="logic" class="tab-content">
+                        <div class="error-card">
+                            <div class="video-container">
+                                <iframe src="https://www.youtube.com/embed/vy3y5gCniKA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                            <div class="error-type">🧠 Wrong Logic Errors</div>
+                            <p><strong>What it is:</strong> A 'Logic Error' is when the code runs, but it does the wrong thing. The computer follows your instructions, but the instructions are wrong.</p>
+                            <p><strong>What happens:</strong> The game does something you did not want it to do.</p>
+                            
+                            <h4>Example of a Logic Error:</h4>
+                            <ul>
+                                <li>Using a '+' when you should use a '-'</li>
+                                <li>Telling the computer to go left when you want it to go right.</li>
+                            </ul>
+
+                            <h4>Example in our Pong Game:</h4>
+                            <div class="code-block">
+                                <pre><span class="line-number">1</span>  # This code has a logic mistake
+<span class="line-number">2</span>  # When the ball hits the paddle, it should bounce back.
+<span class="line-number">3</span>  # But here, it gets faster and faster! That's wrong.
+<span class="line-number">4</span>  <span class="error-highlight">ball_speed = ball_speed * 2</span>
+<span class="line-number">5</span>      
+<span class="line-number">6</span>  # The mistake is using * 2. It should be * -1 to go the other way.</pre>
+                            </div>
+
+                            <div class="interactive-exercise">
+                                <h4>🎯 Let's fix it!</h4>
+                                <p>To make the ball bounce back, we need to reverse its speed. Type the correct code in the box.</p>
+                                <input type="text" id="logicFix" placeholder="Type the correct line here..." aria-label="Fix logic error">
+                                <button class="btn" onclick="checkLogicFix()">Check My Answer</button>
+                                <div id="logicFeedback"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="runtime" class="tab-content">
+                        <div class="error-card">
+                            <div class="video-container">
+                                <iframe src="https://www.youtube.com/embed/_0TFJLkLLdE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                            <div class="error-type">⚠️ Crashing Errors (Runtime Errors)</div>
+                            <p><strong>What it is:</strong> A 'Runtime Error' is an error that happens when you are playing the game. It makes the game crash.</p>
+                            <p><strong>What happens:</strong> The game stops working.</p>
+                            
+                            <h4>Examples of Crashing Errors:</h4>
+                            <ul>
+                                <li>Trying to divide a number by zero.</li>
+                                <li>Trying to use something that is not there.</li>
+                            </ul>
+
+                            <h4>Example in our Pong Game:</h4>
+                            <div class="code-block">
+                                <pre><span class="line-number">1</span>  # This code has a crashing error
+<span class="line-number">2</span>  players = ["Player 1", "Player 2"]
+<span class="line-number">3</span>  
+<span class="line-number">4</span>  # Let's try to get the third player. But there is no third player!
+<span class="line-number">5</span>  <span class="error-highlight">print(players[2])</span>
+<span class="line-number">6</span>      
+<span class="line-number">7</span>  # The mistake is asking for item 2. In code, we start counting from 0.
+<span class="line-number">8</span>  # So, item 0 is "Player 1" and item 1 is "Player 2". There is no item 2.</pre>
+                            </div>
+
+                            <div class="interactive-exercise">
+                                <h4>🎯 Let's fix it!</h4>
+                                <p>To get "Player 2", what number should be in the brackets []? Type the correct code in the box.</p>
+                                <input type="text" id="runtimeFix" placeholder="Type the correct line here..." aria-label="Fix runtime error">
+                                <button class="btn" onclick="checkRuntimeFix()">Check My Answer</button>
+                                <div id="runtimeFeedback"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="compare" class="tab-content">
+                        <div class="interactive-exercise">
+                            <h3>📊 Let's Compare The 3 Bugs</h3>
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background: #667eea; color: white;">
+                                        <th style="padding: 10px; border: 1px solid #ddd;">Bug Type</th>
+                                        <th style="padding: 10px; border: 1px solid #ddd;">Does the code run?</th>
+                                        <th style="padding: 10px; border: 1px solid #ddd;">What happens?</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Spelling (Syntax)</strong></td>
+                                        <td style="padding: 10px; border: 1px solid #ddd;">❌ No</td>
+                                        <td style="padding: 10px; border: 1px solid #ddd;">The computer doesn't understand.</td>
+                                    </tr>
+                                    <tr style="background: #f8f9fa;">
+                                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Wrong Logic</strong></td>
+                                        <td style="padding: 10px; border: 1px solid #ddd;">✅ Yes</td>
+                                        <td style="padding: 10px; border: 1px solid #ddd;">The game does the wrong thing.</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Crashing (Runtime)</strong></td>
+                                        <td style="padding: 10px; border: 1px solid #ddd;">⚠️ It crashes!</td>
+                                        <td style="padding: 10px; border: 1px solid #ddd;">The game stops working.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h3>🎮 Quick Quiz: What bug is this?</h3>
+                            <div id="errorQuiz">
+                                <p><strong>Look at the code below.</strong> It has a spelling mistake. What kind of bug is it?</p>
+                                <div class="code-block">
+                                    <pre># The word 'print' is spelled wrong
+pritn("You win!")</pre>
+                                </div>
+                                <label class="quiz-option">
+                                    <input type="radio" name="errorType" value="syntax"> Spelling Bug (Syntax)
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="errorType" value="logic"> Wrong Logic Bug
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="errorType" value="runtime"> Crashing Bug (Runtime)
+                                </label>
+                                <button class="btn" onclick="checkErrorQuiz()">Submit Answer</button>
+                                <div id="quizFeedback"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div id="page-section3" class="page-tab-content">
+                <!-- Section 3: Guided Practice -->
+                <section class="section" id="section3">
+                    <h2>🎯 Section 3: Guided Practice - Debug Pong Together (20 minutes)</h2>
+                    
+                    <div class="interactive-exercise">
+                        <h3>Algorithm Flowchart for Pong</h3>
+                        <p>Before we debug, let's understand the algorithm:</p>
+                        
+                        <div style="text-align: center; margin: 20px 0;">
+                            <svg width="800" height="650" viewBox="0 0 800 650" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="14">
+                                <!-- Definitions for markers -->
+                                <defs>
+                                    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+                                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#333" />
+                                    </marker>
+                                </defs>
+
+                                <!-- Styles -->
+                                <style>
+                                    .box { fill: #e3f2fd; stroke: #64b5f6; stroke-width: 2; }
+                                    .decision { fill: #fff3e0; stroke: #ffb74d; stroke-width: 2; }
+                                    .terminator { fill: #fce4ec; stroke: #f06292; stroke-width: 2; }
+                                    .line { stroke: #333; stroke-width: 2; marker-end: url(#arrow); }
+                                    .line-label { fill: #333; font-weight: bold; }
+                                </style>
+
+                                <!-- Elements -->
+                                <g transform="translate(400, 20)">
+                                    <rect x="-75" y="0" width="150" height="50" rx="25" class="terminator" />
+                                    <text x="0" y="30" text-anchor="middle">START</text>
+                                </g>
+
+                                <g transform="translate(400, 110)">
+                                    <rect x="-150" y="0" width="300" height="50" class="box" />
+                                    <text x="0" y="30" text-anchor="middle">Initialise Game (Set scores, positions)</text>
+                                </g>
+
+                                <g transform="translate(400, 200)">
+                                    <rect x="-150" y="0" width="300" height="50" class="box" />
+                                    <text x="0" y="30" text-anchor="middle">Draw Game Objects (Paddles, Ball)</text>
+                                </g>
+
+                                <g transform="translate(400, 290)">
+                                    <rect x="-150" y="0" width="300" height="50" class="box" />
+                                    <text x="0" y="30" text-anchor="middle">Get Player Input (Move Paddles)</text>
+                                </g>
+
+                                <g transform="translate(400, 380)">
+                                    <rect x="-150" y="0" width="300" height="50" class="box" />
+                                    <text x="0" y="30" text-anchor="middle">Update Ball Position & Check Collisions</text>
+                                </g>
+
+                                <g transform="translate(400, 490)">
+                                    <path d="M -100 0 L 0 -50 L 100 0 L 0 50 Z" class="decision" />
+                                    <text x="0" y="5" text-anchor="middle">Game Over?</text>
+                                </g>
+
+                                <g transform="translate(400, 600)">
+                                    <rect x="-75" y="0" width="150" height="50" rx="25" class="terminator" />
+                                    <text x="0" y="30" text-anchor="middle">END</text>
+                                </g>
+
+                                <!-- Connectors -->
+                                <path class="line" d="M 400 70 V 110" />
+                                <path class="line" d="M 400 160 V 200" />
+                                <path class="line" d="M 400 250 V 290" />
+                                <path class="line" d="M 400 340 V 380" />
+                                <path class="line" d="M 400 430 V 465" />
+                                <path class="line" d="M 400 540 V 600" />
+                                <text class="line-label" x="410" y="570">Yes</text>
+                                
+                                <!-- Loop back -->
+                                <path class="line" d="M 300 490 C 150 490, 150 200, 400 200" />
+                                <text class="line-label" x="160" y="345">No</text>
+                            </svg>
+                        </div>
+
+                        <h3>🐞 Let's Find the Bugs!</h3>
+                        <p>Now that we know the algorithm, let's find and fix the bugs in the Pong code!</p>
+                    </div>
+
+                    <div class="interactive-exercise">
+                        <h3>🔧 Debugging Challenge 1: Multiple Errors</h3>
+                        <p>This Pong code has THREE errors. Can you find and fix them all?</p>
+                        
+                        <div class="code-block">
+                            <pre><span class="line-number">1</span>  import pygame
+<span class="line-number">2</span>  
+<span class="line-number">3</span>  # Initialize Pygame
+<span class="line-number">4</span>  pygame.init()
+<span class="line-number">5</span>  screen = pygame.display.set_mode((800, 600))
+<span class="line-number">6</span>  
+<span class="line-number">7</span>  # Game variables
+<span class="line-number">8</span>  ball_x = 400
+<span class="line-number">9</span>  ball_y = 300
+<span class="line-number">10</span> ball_speed_x = 5
+<span class="line-number">11</span> ball_speed_y = 5
+<span class="line-number">12</span> 
+<span class="line-number">13</span> # Paddle variables
+<span class="line-number">14</span> paddle1_y = 250
+<span class="line-number">15</span> paddle2_y = 250
+<span class="line-number">16</span> paddle_speed = 10
+<span class="line-number">17</span> 
+<span class="line-number">18</span> # Main game loop
+<span class="line-number">19</span> <span class="error-highlight">while True</span>  # SYNTAX ERROR
+<span class="line-number">20</span>     # Move ball
+<span class="line-number">21</span>     ball_x += ball_speed_x
+<span class="line-number">22</span>     ball_y += ball_speed_y
+<span class="line-number">23</span>     
+<span class="line-number">24</span>     # Check boundaries
+<span class="line-number">25</span>     if ball_y <= 0 or ball_y >= 600:
+<span class="line-number">26</span>         <span class="error-highlight">ball_speed_y = ball_speed_y</span>  # LOGIC ERROR
+<span class="line-number">27</span>     
+<span class="line-number">28</span>     # Check paddle collision
+<span class="line-number">29</span>     if ball_x <= 50:
+<span class="line-number">30</span>         if paddle1_y <= ball_y <= paddle1_y + 100:
+<span class="line-number">31</span>             ball_speed_x = -ball_speed_x
+<span class="line-number">32</span>         else:
+<span class="line-number">33</span>             <span class="error-highlight">score = scores[2]</span>  # RUNTIME ERROR
+<span class="line-number">34</span>     
+<span class="line-number">35</span>     pygame.display.update()</pre>
+                        </div>
+
+                        <div style="background: #f0f4ff; padding: 15px; border-radius: 10px; margin: 15px 0;">
+                            <h4>Find the Errors:</h4>
+                            <div style="margin: 10px 0;">
+                                <label>Error 1 (Line 19):</label>
+                                <select id="error1Type" aria-label="Select error type for line 19">
+                                    <option value="">Select error type...</option>
+                                    <option value="syntax">Syntax Error</option>
+                                    <option value="logic">Logic Error</option>
+                                    <option value="runtime">Runtime Error</option>
+                                </select>
+                                <input type="text" id="error1Fix" placeholder="How to fix it?" aria-label="Fix for error 1">
+                            </div>
+                            
+                            <div style="margin: 10px 0;">
+                                <label>Error 2 (Line 26):</label>
+                                <select id="error2Type" aria-label="Select error type for line 26">
+                                    <option value="">Select error type...</option>
+                                    <option value="syntax">Syntax Error</option>
+                                    <option value="logic">Logic Error</option>
+                                    <option value="runtime">Runtime Error</option>
+                                </select>
+                                <input type="text" id="error2Fix" placeholder="How to fix it?" aria-label="Fix for error 2">
+                            </div>
+                            
+                            <div style="margin: 10px 0;">
+                                <label>Error 3 (Line 33):</label>
+                                <select id="error3Type" aria-label="Select error type for line 33">
+                                    <option value="">Select error type...</option>
+                                    <option value="syntax">Syntax Error</option>
+                                    <option value="logic">Logic Error</option>
+                                    <option value="runtime">Runtime Error</option>
+                                </select>
+                                <input type="text" id="error3Fix" placeholder="How to fix it?" aria-label="Fix for error 3">
+                            </div>
+                            
+                            <button class="btn btn-success" onclick="checkMultipleErrors()">Check All Answers</button>
+                            <div id="multipleErrorsFeedback"></div>
+                        </div>
+                    </div>
+
+                    <div class="interactive-exercise">
+                        <h3>📝 Desk Checking Exercise</h3>
+                        <p>Let's trace through this algorithm step by step:</p>
+                        
+                        <div class="code-block">
+                            <pre>ball_x = 100
+ball_y = 200
+ball_speed_x = 5
+ball_speed_y = -3
+
+# Step through 3 iterations
+for i in range(3):
+    ball_x = ball_x + ball_speed_x
+    ball_y = ball_y + ball_speed_y
+    print(f"Step {i+1}: Ball at ({ball_x}, {ball_y})")</pre>
+                        </div>
+                        
+                        <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                            <thead>
+                                <tr style="background: #667eea; color: white;">
+                                    <th style="padding: 10px; border: 1px solid #ddd;">Step</th>
+                                    <th style="padding: 10px; border: 1px solid #ddd;">ball_x</th>
+                                    <th style="padding: 10px; border: 1px solid #ddd;">ball_y</th>
+                                    <th style="padding: 10px; border: 1px solid #ddd;">Your Prediction</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding: 10px; border: 1px solid #ddd;">Initial</td>
+                                    <td style="padding: 10px; border: 1px solid #ddd;">100</td>
+                                    <td style="padding: 10px; border: 1px solid #ddd;">200</td>
+                                    <td style="padding: 10px; border: 1px solid #ddd;">-</td>
+                                </tr>
+                                <tr style="background: #f8f9fa;">
+                                    <td style="padding: 10px; border: 1px solid #ddd;">Step 1</td>
+                                    <td style="padding: 10px; border: 1px solid #ddd;">?</td>
+                                    <td style="padding: 10px; border: 1px solid #ddd;">?</td>
+                                    <td style="padding: 10px; border: 1px solid #ddd;">
+                                        <input type="text" id="step1x" placeholder="x" style="width: 50px;" aria-label="Step 1 x value">
+                                        <input type="text" id="step1y" placeholder="y" style="width: 50px;" aria-label="Step 1 y value">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px; border: 1px solid #ddd;">Step 2</td>
+                                    <td style="padding: 10px; border: 1px solid #ddd;">?</td>
+                                    <td style="padding: 10px; border: 1px solid #ddd;">?</td>
+                                    <td style="padding: 10px; border: 1px solid #ddd;">
+                                        <input type="text" id="step2x" placeholder="x" style="width: 50px;" aria-label="Step 2 x value">
+                                        <input type="text" id="step2y" placeholder="y" style="width: 50px;" aria-label="Step 2 y value">
+                                    </td>
+                                </tr>
+                                <tr style="background: #f8f9fa;">
+                                    <td style="padding: 10px; border: 1px solid #ddd;">Step 3</td>
+                                    <td style="padding: 10px; border: 1px solid #ddd;">?</td>
+                                    <td style="padding: 10px; border: 1px solid #ddd;">?</td>
+                                    <td style="padding: 10px; border: 1px solid #ddd;">
+                                        <input type="text" id="step3x" placeholder="x" style="width: 50px;" aria-label="Step 3 x value">
+                                        <input type="text" id="step3y" placeholder="y" style="width: 50px;" aria-label="Step 3 y value">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <button class="btn" onclick="checkDeskCheck()">Check Trace Table</button>
+                        <div id="deskCheckFeedback"></div>
+                    </div>
+                </section>
+            </div>
+
+            <div id="page-section4" class="page-tab-content">
+                <!-- Section 4: Independent Practice -->
+                <section class="section" id="section4">
+                    <h2>💻 Section 4: Independent Practice - Debug Your Pong (30 minutes)</h2>
+                    
+                    <div class="interactive-exercise">
+                        <h3>🎮 Challenge Mode: Fix the Broken Pong Game</h3>
+                        <p>This Pong game has 5 bugs hidden in it. Can you find and fix them all?</p>
+                        
+                        <div class="timer" id="challengeTimer">Time: 00:00</div>
+                        
+                        <div class="code-block">
+                            <pre id="buggyCode"><span class="line-number">1</span>  import pygame
+<span class="line-number">2</span>  import random
+<span class="line-number">3</span>  
+<span class="line-number">4</span>  class PongGame:
+<span class="line-number">5</span>      def __init__(self):
+<span class="line-number">6</span>          pygame.init()
+<span class="line-number">7</span>          self.screen = pygame.display.set_mode((800, 600))
+<span class="line-number">8</span>          self.clock = pygame.time.Clock()
+<span class="line-number">9</span>          
+<span class="line-number">10</span>         # Ball properties
+<span class="line-number">11</span>         self.ball_x = 400
+<span class="line-number">12</span>         self.ball_y = 300
+<span class="line-number">13</span>         self.ball_radius = 10
+<span class="line-number">14</span>         self.ball_speed_x = random.choice([-5, 5])
+<span class="line-number">15</span>         self.ball_speed_y = random.choice([-5, 5])
+<span class="line-number">16</span>         
+<span class="line-number">17</span>         # Paddle properties
+<span class="line-number">18</span>         self.paddle_width = 15
+<span class="line-number">19</span>         self.paddle_height = 100
+<span class="line-number">20</span>         self.paddle1_y = 250
+<span class="line-number">21</span>         self.paddle2_y = 250
+<span class="line-number">22</span>         self.paddle_speed = 8
+<span class="line-number">23</span>         
+<span class="line-number">24</span>         # Scores
+<span class="line-number">25</span>         self.score1 = 0
+<span class="line-number">26</span>         self.score2 = 0
+<span class="line-number">27</span>         
+<span class="line-number">28</span>     <span class="error-highlight">def move_ball(self)</span>  # BUG 1: Missing colon
+<span class="line-number">29</span>         self.ball_x += self.ball_speed_x
+<span class="line-number">30</span>         self.ball_y += self.ball_speed_y
+<span class="line-number">31</span>         
+<span class="line-number">32</span>         # Check top and bottom boundaries
+<span class="line-number">33</span>         if self.ball_y <= self.ball_radius or self.ball_y >= 600 - self.ball_radius:
+<span class="line-number">34</span>             <span class="error-highlight">self.ball_speed_y = self.ball_speed_y * -1</span>  # Correct!
+<span class="line-number">35</span>             
+<span class="line-number">36</span>     def check_paddle_collision(self):
+<span class="line-number">37</span>         # Left paddle collision
+<span class="line-number">38</span>         if self.ball_x <= 30 + self.ball_radius:
+<span class="line-number">39</span>             <span class="error-highlight">if self.paddle1_y < self.ball_y < self.paddle1_y + self.paddle_height:</span>  # BUG 2: Should use <=
+<span class="line-number">40</span>                 self.ball_speed_x = abs(self.ball_speed_x)
+<span class="line-number">41</span>                 
+<span class="line-number">42</span>         # Right paddle collision
+<span class="line-number">43</span>         if self.ball_x >= 770 - self.ball_radius:
+<span class="line-number">44</span>             if self.paddle2_y <= self.ball_y <= self.paddle2_y + self.paddle_height:
+<span class="line-number">45</span>                 <span class="error-highlight">self.ball_speed_x = abs(self.ball_speed_x)</span>  # BUG 3: Should be negative
+<span class="line-number">46</span>                 
+<span class="line-number">47</span>     def check_score(self):
+<span class="line-number">48</span>         if self.ball_x <= 0:
+<span class="line-number">49</span>             self.score2 += 1
+<span class="line-number">50</span>             self.reset_ball()
+<span class="line-number">51</span>         elif self.ball_x >= 800:
+<span class="line-number">52</span>             <span class="error-highlight">self.score1 += 2</span>  # BUG 4: Should add 1, not 2
+<span class="line-number">53</span>             self.reset_ball()
+<span class="line-number">54</span>             
+<span class="line-number">55</span>     def reset_ball(self):
+<span class="line-number">56</span>         self.ball_x = 400
+<span class="line-number">57</span>         self.ball_y = 300
+<span class="line-number">58</span>         <span class="error-highlight">self.ball_speed_x = random.choice[-5, 5]</span>  # BUG 5: Missing parentheses
+<span class="line-number">59</span>         self.ball_speed_y = random.choice([-5, 5])</pre>
+                        </div>
+
+                        <div style="background: #f0f4ff; padding: 15px; border-radius: 10px; margin: 15px 0;">
+                            <h4>Bug Report Form</h4>
+                            <div id="bugReports">
+                                <!-- Bug report forms will be generated here -->
+                            </div>
+                            <button class="btn btn-success" onclick="startBugHunt()">Start Bug Hunt!</button>
+                            <button class="btn" onclick="submitBugReport()" style="display: none;" id="submitBugsBtn">Submit All Bug Fixes</button>
+                            <div id="bugHuntFeedback"></div>
+                        </div>
+                    </div>
+
+                </section>
+            </div>
+
+            <div id="page-section5" class="page-tab-content">
+                <!-- Section 5: Pseudocode -->
+                <section class="section" id="section5">
+                    <h2>✍️ Section 5: Pseudocode (15 minutes)</h2>
+
+                    <div class="interactive-exercise">
+                        <h3>What is Pseudocode?</h3>
+                        <p>Watch the video below to learn about what pseudocode is and how it's used to plan algorithms.</p>
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/e-DmMVq_OGM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+
+                    <div class="interactive-exercise">
+                        <h3>📝 Quick Quiz: What is Pseudocode?</h3>
+                        <p>Based on the video, select the best definition for pseudocode.</p>
+                        <div id="pseudocodeQuiz">
+                            <label class="quiz-option">
+                                <input type="radio" name="pseudocodeDef" value="a"> A) A type of secret code used by programmers.
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="pseudocodeDef" value="b"> B) A detailed plan or outline of an algorithm, written in a simplified, human-readable way.
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="pseudocodeDef" value="c"> C) A diagram that visually represents the flow of a program, like a flowchart.
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="pseudocodeDef" value="d"> D) The final, compiled code that a computer executes directly.
+                            </label>
+                            <button class="btn" onclick="checkPseudocodeDefinition()">Submit Answer</button>
+                            <div id="pseudocodeQuizFeedback"></div>
+                        </div>
+                    </div>
+
+                    <div class="interactive-exercise">
+                        <h3>⌨️ Practice Your Pseudocode</h3>
+                        <p>Watch the video again. Type the pseudocode for calculating the area of a rectangle into the box below, then check your answer.</p>
+                        
+                        <textarea id="pseudocodePractice" rows="8" placeholder="Write your pseudocode here..."></textarea>
+                        
+                        <button class="btn" onclick="checkPseudocodePractice()">Check Pseudocode</button>
+                        <div id="pseudocodePracticeFeedback"></div>
+                    </div>
+
+                    <div class="interactive-exercise">
+                        <h3>⌨️ Practice with Selection (IF statements)</h3>
+                        <p>Watch the video on using IF statements in pseudocode. Type the pseudocode demonstrated into the box below, then check your answer.</p>
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/F8b0ENBTaWY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        
+                        <textarea id="pseudocodeSelectionPractice" rows="10" placeholder="Write your pseudocode for the selection example here..."></textarea>
+                        
+                        <button class="btn" onclick="checkPseudocodeSelectionPractice()">Check Pseudocode</button>
+                        <div id="pseudocodeSelectionFeedback"></div>
+                    </div>
+                </section>
+            </div>
+
+            <div id="page-section6" class="page-tab-content">
+                <!-- Section 6: Challenge Section -->
+                <section class="section" id="section6">
+                    <h2>🏆 Section 6: Advanced Challenges (15 minutes)</h2>
+                    
+                    <div class="interactive-exercise">
+                        <h3>🚀 Expert Level: Complex Error Scenarios</h3>
+                        
+                        <div class="tabs">
+                            <button class="tab-button active" onclick="switchChallengeTab('infinite', this)">Infinite Loop</button>
+                            <button class="tab-button" onclick="switchChallengeTab('nested', this)">Nested Errors</button>
+                            <button class="tab-button" onclick="switchChallengeTab('performance', this)">Performance Bug</button>
+                        </div>
+
+                        <div id="infinite" class="challenge-content active">
+                            <h4>Challenge 1: The Infinite Loop</h4>
+                            <p>This code causes the game to freeze. Can you spot why?</p>
+                            <div class="code-block">
+                                <pre>def wait_for_player():
+    ready = False
+    while not ready:
+        # Check if player pressed space
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE]:
+            ready = True
+        # BUG: Missing pygame.event.pump() or pygame.event.get()
+        # Without processing events, the game freezes!</pre>
+                            </div>
+                            <input type="text" id="infiniteFix" placeholder="What's missing to prevent the freeze?" aria-label="Fix infinite loop">
+                            <button class="btn" onclick="checkInfiniteFix()">Check Answer</button>
+                            <div id="infiniteFeedback"></div>
+                        </div>
+
+                        <div id="nested" class="challenge-content">
+                            <h4>Challenge 2: Multiple Interacting Bugs</h4>
+                            <p>These bugs work together to cause problems. Fix them in the right order!</p>
+                            <div class="code-block">
+                                <pre>def calculate_ball_angle(paddle_y, ball_y, paddle_height):
+    # BUG 1: Division by zero possible
+    relative_intersect = (paddle_y + paddle_height/2) - ball_y
+    normalized_intersect = relative_intersect / (paddle_height/2)
+    
+    # BUG 2: Wrong calculation (should be multiplication)
+    bounce_angle = normalized_intersect + MAX_BOUNCE_ANGLE
+    
+    # BUG 3: No bounds checking
+    return bounce_angle</pre>
+                            </div>
+                        </div>
+
+                        <div id="performance" class="challenge-content">
+                            <h4>Challenge 3: Performance Bug</h4>
+                            <p>This code works but makes the game very slow. Why?</p>
+                            <div class="code-block">
+                                <pre>def draw_background():
+    # BUG: Loading image every frame instead of once
+    background = pygame.image.load("background.png")
+    screen.blit(background, (0, 0))
+    
+    # This should be loaded once in __init__ and reused!</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="interactive-exercise">
+                        <h3>🎯 Speed Debugging Challenge</h3>
+                        <p>How quickly can you identify these error types? Beat the clock!</p>
+                        
+                        <div class="timer" id="speedTimer">30 seconds</div>
+                        
+                        <div id="speedChallenge" style="display: none;">
+                            <!-- Speed challenge questions will be inserted here -->
+                        </div>
+                        
+                        <button class="btn btn-secondary" onclick="startSpeedChallenge()">Start Speed Challenge!</button>
+                        <div id="speedResults"></div>
+                    </div>
+                </section>
+            </div>
+
+            <div id="page-section7" class="page-tab-content">
+                <!-- Section 7: Reflection -->
+                <section class="section" id="section7">
+                    <h2>📝 Section 7: Reflection (5 minutes)</h2>
+                    <div class="interactive-exercise">
+                        <h3>What did you learn?</h3>
+                        <p>Reflect on what you've learned about algorithms and debugging.</p>
+                        <textarea id="reflection" rows="6" placeholder="Write your reflection here..."></textarea>
+                    </div>
+                    <button class="btn btn-success" onclick="saveAnswersToPDF()" style="margin-top: 20px;">Save My Answers as PDF</button>
+                </section>
+            </div>
+
+            <div id="page-achievements" class="page-tab-content">
+                <!-- Achievements Section -->
+                <section class="section" id="achievements">
+                    <h2>🏅 Your Achievements</h2>
+                    <div id="achievementsList" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <!-- Achievements will be displayed here -->
+                    </div>
+                </section>
+            </div>
+
+            <div id="page-leaderboard" class="page-tab-content">
+                <!-- Leaderboard -->
+                <section class="section" id="leaderboard">
+                    <h2>📊 Class Leaderboard</h2>
+                    <div class="leaderboard">
+                        <div class="leaderboard-entry gold">
+                            <span>🥇 You</span>
+                            <span id="finalScore">0 points</span>
+                        </div>
+                        <div class="leaderboard-entry">
+                            <span>🥈 Student Example 1</span>
+                            <span>850 points</span>
+                        </div>
+                        <div class="leaderboard-entry">
+                            <span>🥉 Student Example 2</span>
+                            <span>720 points</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 2px solid #e0e0e0; color: #666;">
+            <p>© 2025 St John Paul II Catholic College - Computing Technology Stage 5</p>
+            <p>Created for Assessment Task 2: Creating Games and Simulations</p>
+        </footer>
+    </div>
+
+    <script>
+        // Global variables
+        let score = 0;
+        let errorsFoundCount = 0;
+        let badges = [];
+        let startTime = Date.now();
+        let progress = 0;
+        let timerInterval;
+        let speedChallengeTimer;
+        let challengeStartTime;
+        const answeredQuestions = new Set();
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+            startTimeTracking();
+            initializeMiniPong();
+            generateBugReports();
+        });
+
+        // Time tracking
+        function startTimeTracking() {
+            setInterval(function() {
+                let elapsed = Math.floor((Date.now() - startTime) / 1000);
+                let minutes = Math.floor(elapsed / 60);
+                let seconds = elapsed % 60;
+                document.getElementById('timeSpent').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        // Update stats
+        function updateStats() {
+            document.getElementById('scoreDisplay').textContent = score;
+            document.getElementById('errorsFound').textContent = errorsFoundCount;
+            document.getElementById('badgesEarned').textContent = badges.length;
+            document.getElementById('finalScore').textContent = score + ' points';
+            updateProgress();
+        }
+
+        // Progress tracking
+        function updateProgress() {
+            progress = Math.min(100, Math.floor((score / 1000) * 100));
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressBar').textContent = progress + '%';
+        }
+
+        // Tab switching
+        function switchTab(tabName, button) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            button.parentElement.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            button.classList.add('active');
+        }
+
+        // Page-level tab switching
+        function switchPageTab(tabId, button) {
+            document.querySelectorAll('.page-tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.page-tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+            button.classList.add('active');
+        }
+
+        // Score management
+        function addScore(points, reason) {
+            score += points;
+            updateStats();
+            
+            // Check for achievements
+            checkAchievements();
+            
+            // Show feedback
+            if (reason) {
+                showTemporaryFeedback('+' + points + ' points: ' + reason, 'success');
+            }
+        }
+
+        // Show temporary feedback
+        function showTemporaryFeedback(message, type) {
+            const feedback = document.createElement('div');
+            feedback.className = 'feedback ' + type;
+            feedback.textContent = message;
+            feedback.style.position = 'fixed';
+            feedback.style.top = '20px';
+            feedback.style.right = '20px';
+            feedback.style.zIndex = '1000';
+            document.body.appendChild(feedback);
+            
+            setTimeout(() => {
+                feedback.remove();
+            }, 3000);
+        }
+
+        // Error checking functions
+        function checkSyntaxFix() {
+            const input = document.getElementById('syntaxFix').value.trim();
+            const feedback = document.getElementById('syntaxFeedback');
+            const questionId = 'syntaxFix';
+
+            if (answeredQuestions.has(questionId)) {
+                feedback.innerHTML = '<div class="feedback info">You have already answered this question correctly.</div>';
+                return;
+            }
+            
+            if (input === 'def move_ball():') {
+                feedback.innerHTML = '<div class="feedback success">✅ Correct! You need to add a colon after the function definition.</div>';
+                addScore(50, 'Fixed syntax error');
+                errorsFoundCount++;
+                updateStats();
+                answeredQuestions.add(questionId);
+                document.getElementById('syntaxFix').disabled = true;
+                document.querySelector('#syntaxFix + .btn').disabled = true;
+            } else {
+                feedback.innerHTML = '<div class="feedback error">❌ Not quite. Remember, Python functions need a colon (:) at the end of the definition line.</div>';
+            }
+        }
+
+        function checkLogicFix() {
+            const input = document.getElementById('logicFix').value.trim();
+            const feedback = document.getElementById('logicFeedback');
+            const correctAnswers = ['ball_speed_x = -ball_speed_x', 'ball_speed_x *= -1'];
+            const questionId = 'logicFix';
+
+            if (answeredQuestions.has(questionId)) {
+                feedback.innerHTML = '<div class="feedback info">You have already answered this question correctly.</div>';
+                return;
+            }
+            
+            if (correctAnswers.some(answer => input.replace(/\s/g, '') === answer.replace(/\s/g, ''))) {
+                feedback.innerHTML = '<div class="feedback success">✅ Perfect! The ball should just reverse direction, not speed up.</div>';
+                addScore(50, 'Fixed logic error');
+                errorsFoundCount++;
+                updateStats();
+                answeredQuestions.add(questionId);
+                document.getElementById('logicFix').disabled = true;
+                document.querySelector('#logicFix + .btn').disabled = true;
+            } else {
+                feedback.innerHTML = '<div class="feedback error">❌ Try again. We want to reverse the direction without changing the speed magnitude.</div>';
+            }
+        }
+
+        function checkConditionFix() {
+            const input = document.getElementById('conditionFix').value.trim();
+            const feedback = document.getElementById('conditionFeedback');
+            if (input.includes('>=')) {
+                feedback.innerHTML = '<div class="feedback success">✅ Correct! Using `>=` ensures the condition is true when the score is greater than OR EQUAL TO 100.</div>';
+                addScore(50, 'Fixed incorrect condition');
+                errorsFoundCount++;
+                updateStats();
+            } else {
+                feedback.innerHTML = '<div class="feedback error">❌ Not quite. To include 100, the condition should check if the score is "greater than or equal to" 100.</div>';
+            }
+        }
+
+        function checkLoopFix() {
+            const input = document.getElementById('loopFix').value.trim();
+            const feedback = document.getElementById('loopFeedback');
+            if (input === 'for i in range(len(numbers)):') {
+                feedback.innerHTML = '<div class="feedback success">✅ Perfect! `range(len(numbers))` goes from 0 to 2, which are the correct indices for the list.</div>';
+                addScore(50, 'Fixed off-by-one error');
+                errorsFoundCount++;
+                updateStats();
+            } else {
+                feedback.innerHTML = '<div class="feedback error">❌ Hint: `len(numbers)` is 3. `range(3)` gives you 0, 1, 2. You should not add or subtract anything from `len(numbers)`.</div>';
+            }
+        }
+
+        function checkAlgorithmFix() {
+            const input = document.getElementById('algorithmFix').value.trim();
+            const feedback = document.getElementById('algorithmFeedback');
+            if (input === 'average = total / len(numbers)') {
+                feedback.innerHTML = '<div class="feedback success">✅ Correct! The algorithm for an average is the sum divided by the count, with no other operations.</div>';
+                addScore(50, 'Fixed algorithm implementation');
+                errorsFoundCount++;
+                updateStats();
+            } else {
+                feedback.innerHTML = '<div class="feedback error">❌ The logic is simpler than you think. To find the average, you just need to divide the total by the number of items.</div>';
+            }
+        }
+
+        function checkOrderFix() {
+            const input = document.getElementById('orderFix').value.trim().replace(/\s/g, '');
+            const feedback = document.getElementById('orderFeedback');
+            if (input === 'average=(score1+score2+score3)/3') {
+                feedback.innerHTML = '<div class="feedback success">✅ Excellent! Using parentheses ensures the addition is performed before the division.</div>';
+                addScore(50, 'Fixed order of operations');
+                errorsFoundCount++;
+                updateStats();
+            } else {
+                feedback.innerHTML = '<div class="feedback error">❌ Remember PEMDAS/BODMAS. To make the addition happen first, you need to wrap `score1 + score2 + score3` in parentheses.</div>';
+            }
+        }
+
+        function checkRuntimeFix() {
+            const input = document.getElementById('runtimeFix').value.trim();
+            const feedback = document.getElementById('runtimeFeedback');
+            
+            if (input.includes('players[winner_index]') && !input.includes('+')) {
+                feedback.innerHTML = '<div class="feedback success">✅ Excellent! Using the index directly prevents the IndexError.</div>';
+                addScore(50, 'Fixed runtime error');
+                errorsFoundCount++;
+                updateStats();
+            } else {
+                feedback.innerHTML = '<div class="feedback error">❌ Not quite. The issue is that winner_index + 1 might exceed the list bounds.</div>';
+            }
+        }
+
+        function checkDivisionFix() {
+            const input = document.getElementById('divisionFix').value.toLowerCase();
+            const feedback = document.getElementById('divisionFeedback');
+            if (input.includes('if number_of_games > 0:')) {
+                feedback.innerHTML = '<div class="feedback success">✅ Correct! Checking if the divisor is not zero before dividing is the best way to prevent this error.</div>';
+                addScore(50, 'Fixed division by zero error');
+                errorsFoundCount++;
+                updateStats();
+            } else {
+                feedback.innerHTML = '<div class="feedback error">❌ Not quite. The best practice is to use an `if` statement to check if `number_of_games` is greater than 0 before you try to divide by it.</div>';
+            }
+        }
+
+        function checkTypeFix() {
+            const input = document.getElementById('typeFix').value.trim();
+            const feedback = document.getElementById('typeFeedback');
+            if (input.includes('str(score)')) {
+                feedback.innerHTML = '<div class="feedback success">✅ Excellent! Converting the number to a string with `str()` allows you to concatenate it with another string.</div>';
+                addScore(50, 'Fixed type error');
+                errorsFoundCount++;
+                updateStats();
+            } else {
+                feedback.innerHTML = '<div class="feedback error">❌ Almost. You need to convert the `score` variable to a string before you can add it to the `message` string. The function `str()` can do this.</div>';
+            }
+        }
+
+        function checkNameFix() {
+            const input = document.getElementById('nameFix').value.trim();
+            const feedback = document.getElementById('nameFeedback');
+            if (input === 'print(player_name)') {
+                feedback.innerHTML = '<div class="feedback success">✅ Correct! The variable was misspelled.</div>';
+                addScore(50, 'Fixed name error');
+                errorsFoundCount++;
+                updateStats();
+            } else {
+                feedback.innerHTML = '<div class="feedback error">❌ Check your spelling carefully. The variable is `player_name`.</div>';
+            }
+        }
+
+        function checkFileNotFoundFix() {
+            const input = document.getElementById('fileNotFoundFix').value.trim().toLowerCase();
+            const feedback = document.getElementById('fileNotFoundFeedback');
+            if (input.includes('try:') && input.includes('except filenotfounderror:')) {
+                feedback.innerHTML = '<div class="feedback success">✅ Perfect! Using a `try...except` block is the standard way to handle potential `FileNotFoundError` exceptions in Python.</div>';
+                addScore(50, 'Handled file not found error');
+                errorsFoundCount++;
+                updateStats();
+            } else {
+                feedback.innerHTML = '<div class="feedback error">❌ Not quite. The best way to handle this is with a `try...except FileNotFoundError:` block to gracefully handle the case where the file doesn\'t exist.</div>';
+            }
+        }
+
+        function checkErrorQuiz() {
+            const selected = document.querySelector('input[name="errorType"]:checked');
+            const feedback = document.getElementById('quizFeedback');
+            
+            if (!selected) {
+                feedback.innerHTML = '<div class="feedback info">Please select an answer.</div>';
+                return;
+            }
+            
+            if (selected.value === 'syntax') {
+                feedback.innerHTML = '<div class="feedback success">✅ Correct! Using = (assignment) instead of == (comparison) in an `if` statement is a `SyntaxError` in Python.</div>';
+                addScore(30, 'Identified error type correctly');
+            } else {
+                feedback.innerHTML = `<div class="feedback error">❌ Not quite. It's a syntax error. In Python, \`if score = 10:\` is invalid syntax because conditional statements require a comparison operator like \`==\`.</div>`;
+            }
+        }
+
+        function checkMultipleErrors() {
+            const feedback = document.getElementById('multipleErrorsFeedback');
+            let correct = 0;
+            let messages = [];
+            
+            // Check error 1
+            if (document.getElementById('error1Type').value === 'syntax' && document.getElementById('error1Fix').value.trim().includes(':')) {
+                correct++;
+                messages.push('✅ Error 1: Correctly identified as a syntax error and fixed.');
+            } else {
+                messages.push('❌ Error 1: Incorrect. The missing colon (`:`) at the end of the `while` loop is a syntax error.');
+            }
+            
+            // Check error 2
+            if (document.getElementById('error2Type').value === 'logic' && document.getElementById('error2Fix').value.trim().includes('-')) {
+                correct++;
+                messages.push('✅ Error 2: Correctly identified as a logic error and fixed.');
+            } else {
+                messages.push("❌ Error 2: Incorrect. The ball's speed isn't reversed, causing it to get stuck. This is a logic error. The fix is `ball_speed_y = -ball_speed_y`.");
+            }
+            
+            // Check error 3
+            if (document.getElementById('error3Type').value === 'runtime' && (document.getElementById('error3Fix').value.trim().includes('scores[0]') || document.getElementById('error3Fix').value.trim().includes('scores[1]'))) {
+                correct++;
+                messages.push('✅ Error 3: Correctly identified as a runtime error and fixed.');
+            } else {
+                messages.push("❌ Error 3: Incorrect. `scores[2]` will cause an `IndexError` because the list `scores` (not shown, but implied) would only have two elements. This is a runtime error.");
+            }
+            
+            feedback.innerHTML = '<div class="feedback ' + (correct === 3 ? 'success' : 'info') + '">' +
+                messages.join('<br>') + '<br><br>' +
+                'Score: ' + correct + '/3</div>';
+            
+            if (correct === 3) {
+                addScore(100, 'Found all errors in complex code');
+                errorsFoundCount += 3;
+                updateStats();
+                awardBadge('🔍 Master Debugger');
+            } else {
+                addScore(correct * 20, 'Found ' + correct + ' errors');
+                errorsFoundCount += correct;
+                updateStats();
+            }
+        }
+
+        function checkDeskCheck() {
+            const feedback = document.getElementById('deskCheckFeedback');
+            let correct = 0;
+            
+            // Check answers
+            if (document.getElementById('step1x').value.trim() === '105' && document.getElementById('step1y').value.trim() === '197') correct++;
+            if (document.getElementById('step2x').value.trim() === '110' && document.getElementById('step2y').value.trim() === '194') correct++;
+            if (document.getElementById('step3x').value.trim() === '115' && document.getElementById('step3y').value.trim() === '191') correct++;
+            
+            if (correct === 3) {
+                feedback.innerHTML = '<div class="feedback success">✅ Perfect desk checking! All values are correct.</div>';
+                addScore(75, 'Completed desk check perfectly');
+                awardBadge('📊 Trace Master');
+            } else {
+                feedback.innerHTML = '<div class="feedback info">You got ' + correct + '/3 correct. Remember: ball_x increases by 5 each step, ball_y decreases by 3.</div>';
+                addScore(correct * 20, 'Desk check attempt');
+            }
+        }
+
+        // Bug hunt functions
+        function generateBugReports() {
+            const container = document.getElementById('bugReports');
+            const bugs = [
+                { line: 28, description: 'Missing colon after function definition' },
+                { line: 39, description: 'Comparison operators should include equals' },
+                { line: 45, description: 'Ball speed should be negative' },
+                { line: 52, description: 'Score should increase by 1, not 2' },
+                { line: 58, description: 'Missing parentheses for function call' }
+            ];
+            
+            bugs.forEach((bug, index) => {
+                const div = document.createElement('div');
+                div.style.margin = '15px 0';
+                div.style.padding = '10px';
+                div.style.background = '#fff';
+                div.style.borderRadius = '8px';
+                div.innerHTML = `
+                    <h5>Bug ${index + 1} (Line ${bug.line}):</h5>
+                    <input type="text" id="bug${index + 1}" placeholder="Describe the bug..." style="width: 100%; margin: 5px 0;">
+                    <input type="text" id="fix${index + 1}" placeholder="How to fix it..." style="width: 100%; margin: 5px 0;">
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function startBugHunt() {
+            document.getElementById('submitBugsBtn').style.display = 'inline-block';
+            challengeStartTime = Date.now();
+            
+            // Start timer
+            let seconds = 0;
+            timerInterval = setInterval(function() {
+                seconds++;
+                let mins = Math.floor(seconds / 60);
+                let secs = seconds % 60;
+                document.getElementById('challengeTimer').textContent = `Time: ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }, 1000);
+            
+            showTemporaryFeedback('Bug hunt started! Find all 5 bugs!', 'info');
+        }
+
+        function submitBugReport() {
+            clearInterval(timerInterval);
+            const timeElapsed = Math.floor((Date.now() - challengeStartTime) / 1000);
+            
+            let correct = 0;
+            const answers = {
+                bug1: { desc: ['colon', ':'], fix: [':'] },
+                bug2: { desc: ['<='], fix: ['<='] },
+                bug3: { desc: ['negative', '-'], fix: ['-'] },
+                bug4: { desc: ['1'], fix: ['1'] },
+                bug5: { desc: ['parentheses', '()'], fix: ['()'] }
+            };
+
+            for (let i = 1; i <= 5; i++) {
+                const bugDesc = document.getElementById(`bug${i}`).value.toLowerCase();
+                const bugFix = document.getElementById(`fix${i}`).value.toLowerCase();
+                const answer = answers[`bug${i}`];
+                
+                if (answer.desc.some(d => bugDesc.includes(d)) && answer.fix.some(f => bugFix.includes(f))) {
+                    correct++;
+                }
+            }
+
+            const feedback = document.getElementById('bugHuntFeedback');
+            if (correct === 5) {
+                let timeBonus = Math.max(0, 120 - timeElapsed) * 2;
+                addScore(200 + timeBonus, 'Found all 5 bugs!');
+                feedback.innerHTML = `<div class="feedback success">✅ Amazing! You found all 5 bugs in ${timeElapsed} seconds. You earned a time bonus of ${timeBonus} points!</div>`;
+                awardBadge('🐞 Bug Squasher');
+            } else {
+                addScore(correct * 30, `Found ${correct} of 5 bugs`);
+                feedback.innerHTML = `<div class="feedback info">You found ${correct} out of 5 bugs. Keep trying!</div>`;
+            }
+            errorsFoundCount += correct;
+            updateStats();
+        }
+
+        // Challenge section functions
+        function switchChallengeTab(tabId, button) {
+            document.querySelectorAll('.challenge-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            button.parentElement.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+            button.classList.add('active');
+        }
+
+        function checkInfiniteFix() {
+            const input = document.getElementById('infiniteFix').value.toLowerCase();
+            const feedback = document.getElementById('infiniteFeedback');
+            if (input.includes('event')) {
+                feedback.innerHTML = '<div class="feedback success">✅ Correct! The loop needs to process events using `pygame.event.get()` or `pygame.event.pump()` to prevent the window from becoming unresponsive.</div>';
+                addScore(75, 'Solved infinite loop challenge');
+            } else {
+                feedback.innerHTML = '<div class="feedback error">❌ Not quite. The game freezes because it is not handling events inside the `while` loop.</div>';
+            }
+        }
+
+        function startSpeedChallenge() {
+            const container = document.getElementById('speedChallenge');
+            container.style.display = 'block';
+            container.innerHTML = ''; // Clear previous
+            
+            const questions = [
+                { code: 'pritnt("Hello")', type: 'syntax' },
+                { code: 'x = 10 / 0', type: 'runtime' },
+                { code: 'if x < 5:\n    x = x - 10', type: 'logic' },
+                { code: 'my_list = [1,2]\nprint(my_list[2])', type: 'runtime' },
+                { code: 'for i in range(3)', type: 'syntax' }
+            ];
+
+            questions.forEach((q, i) => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <p><strong>Question ${i+1}:</strong></p>
+                    <div class="code-block"><pre>${q.code}</pre></div>
+                    <select id="speedQ${i}">
+                        <option value="">Select type...</option>
+                        <option value="syntax">Syntax</option>
+                        <option value="logic">Logic</option>
+                        <option value="runtime">Runtime</option>
+                    </select>
+                `;
+                container.appendChild(div);
+            });
+
+            let timeLeft = 30;
+            document.getElementById('speedTimer').textContent = `${timeLeft} seconds`;
+            speedChallengeTimer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('speedTimer').textContent = `${timeLeft} seconds`;
+                if (timeLeft <= 0) {
+                    clearInterval(speedChallengeTimer);
+                    checkSpeedChallenge(questions);
+                }
+            }, 1000);
+        }
+
+        function checkSpeedChallenge(questions) {
+            let correct = 0;
+            questions.forEach((q, i) => {
+                if (document.getElementById(`speedQ${i}`).value === q.type) {
+                    correct++;
+                }
+            });
+            
+            const results = document.getElementById('speedResults');
+            results.innerHTML = `<div class="feedback info">Time's up! You correctly identified ${correct} out of ${questions.length} errors.</div>`;
+            addScore(correct * 15, 'Speed challenge result');
+        }
+
+        // Achievements
+        function awardBadge(badgeName) {
+            if (!badges.includes(badgeName)) {
+                badges.push(badgeName);
+                updateStats();
+                
+                const achievementsList = document.getElementById('achievementsList');
+                const badgeElement = document.createElement('div');
+                badgeElement.className = 'badge';
+                badgeElement.textContent = badgeName;
+                achievementsList.appendChild(badgeElement);
+                
+                showTemporaryFeedback('🏆 New Badge Unlocked: ' + badgeName, 'success');
+            }
+        }
+
+        function checkAchievements() {
+            if (score >= 100 && !badges.includes('💯 Score Centurion')) awardBadge('💯 Score Centurion');
+            if (score >= 500 && !badges.includes('🌟 High Scorer')) awardBadge('🌟 High Scorer');
+            if (errorsFoundCount >= 5 && !badges.includes('🕵️ Error Detective')) awardBadge('🕵️ Error Detective');
+            if (errorsFoundCount >= 10 && !badges.includes('🛠️ Master Fixer')) awardBadge('🛠️ Master Fixer');
+        }
+
+        // Mini Pong Game
+        let miniPongCtx, miniBallX, miniBallY, miniSpeedX, miniSpeedY, miniPaddleY, miniPongRunning;
+        function initializeMiniPong() {
+            const canvas = document.getElementById('miniPong');
+            miniPongCtx = canvas.getContext('2d');
+            miniBallX = canvas.width / 2;
+            miniBallY = canvas.height / 2;
+            miniSpeedX = 2;
+            miniSpeedY = 2;
+            miniPaddleY = canvas.height / 2 - 25;
+            miniPongRunning = false;
+            drawMiniPong();
+        }
+
+        function drawMiniPong() {
+            const canvas = document.getElementById('miniPong');
+            // Clear canvas
+            miniPongCtx.fillStyle = '#000';
+            miniPongCtx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw ball
+            miniPongCtx.fillStyle = '#fff';
+            miniPongCtx.beginPath();
+            miniPongCtx.arc(miniBallX, miniBallY, 5, 0, Math.PI * 2);
+            miniPongCtx.fill();
+            
+            // Draw paddle
+            miniPongCtx.fillRect(10, miniPaddleY, 8, 50);
+        }
+
+        function updateMiniPong() {
+            if (!miniPongRunning) return;
+            
+            const canvas = document.getElementById('miniPong');
+            miniBallX += miniSpeedX;
+            miniBallY += miniSpeedY;
+            
+            // Wall collision
+            if (miniBallY <= 5 || miniBallY >= canvas.height - 5) miniSpeedY *= -1;
+            if (miniBallX >= canvas.width - 5) miniSpeedX *= -1;
+            
+            // Paddle collision
+            if (miniBallX <= 23 && miniBallY > miniPaddleY && miniBallY < miniPaddleY + 50) {
+                miniSpeedX *= -1;
+            }
+            
+            // Reset
+            if (miniBallX <= 0) {
+                miniBallX = canvas.width / 2;
+                miniBallY = canvas.height / 2;
+            }
+            
+            // Simple AI for paddle
+            if (miniBallY > miniPaddleY + 25) miniPaddleY += 1.5;
+            if (miniBallY < miniPaddleY + 25) miniPaddleY -= 1.5;
+            
+            drawMiniPong();
+            requestAnimationFrame(updateMiniPong);
+        }
+
+        function startMiniPong() {
+            if (!miniPongRunning) {
+                miniPongRunning = true;
+                updateMiniPong();
+            }
+        }
+
+        function pauseMiniPong() {
+            miniPongRunning = false;
+        }
+
+        // Pseudocode checks
+        function checkPseudocodeDefinition() {
+            const selected = document.querySelector('input[name="pseudocodeDef"]:checked');
+            const feedback = document.getElementById('pseudocodeQuizFeedback');
+            if (selected && selected.value === 'b') {
+                feedback.innerHTML = '<div class="feedback success">✅ Correct! Pseudocode is a human-readable plan for an algorithm.</div>';
+                addScore(30, 'Understood pseudocode definition');
+            } else {
+                feedback.innerHTML = '<div class="feedback error">❌ Not quite. Pseudocode is not a secret code or a diagram, but a written plan.</div>';
+            }
+        }
+
+        function checkPseudocodePractice() {
+            const input = document.getElementById('pseudocodePractice').value.toLowerCase();
+            const feedback = document.getElementById('pseudocodePracticeFeedback');
+            if (input.includes('input length') && input.includes('input width') && input.includes('area = length * width') && input.includes('output area')) {
+                feedback.innerHTML = '<div class="feedback success">✅ Great job! That looks like correct pseudocode for calculating the area.</div>';
+                addScore(50, 'Wrote correct pseudocode');
+                awardBadge('✍️ Pseudo-Planner');
+            } else {
+                feedback.innerHTML = '<div class="feedback error">❌ Almost there. Make sure you have steps to INPUT the length and width, CALCULATE the area, and OUTPUT the result.</div>';
+            }
+        }
+
+        function checkPseudocodeSelectionPractice() {
+            const input = document.getElementById('pseudocodeSelectionPractice').value.toLowerCase();
+            const feedback = document.getElementById('pseudocodeSelectionFeedback');
+            if (input.includes('if age >= 18') && input.includes('output "you can vote"') && input.includes('else') && input.includes('output "you cannot vote"')) {
+                feedback.innerHTML = '<div class="feedback success">✅ Excellent! You have correctly structured an IF-THEN-ELSE statement in pseudocode.</div>';
+                addScore(50, 'Wrote correct selection pseudocode');
+            } else {
+                feedback.innerHTML = '<div class="feedback error">❌ Check your structure. You need an `IF` condition, a `THEN` part, an `ELSE` part, and an `ENDIF`.</div>';
+            }
+        }
+
+        // Final PDF generation
+        async function saveAnswersToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.text("My Learning Journey: Algorithms and Errors", 10, 10);
+            doc.text(`Final Score: ${score}`, 10, 20);
+            doc.text(`Badges: ${badges.join(', ')}`, 10, 30);
+            
+            let y = 40;
+            
+            // Collect answers
+            const answers = {
+                "Syntax Fix": document.getElementById('syntaxFix').value,
+                "Logic Fix": document.getElementById('logicFix').value,
+                "Runtime Fix": document.getElementById('runtimeFix').value,
+                "Reflection": document.getElementById('reflection').value
+            };
+            
+            for (const [key, value] of Object.entries(answers)) {
+                if (value) {
+                    doc.text(`${key}:`, 10, y);
+                    const splitValue = doc.splitTextToSize(value, 180);
+                    doc.text(splitValue, 10, y + 10);
+                    y += (splitValue.length * 10) + 10;
+                }
+            }
+            
+            doc.save("My-Answers.pdf");
+        }
+
+    </script>
+</body>
+</html>
